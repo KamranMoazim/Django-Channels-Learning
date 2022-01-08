@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>
+        Counter <span id="counter"></span>
+    </h1>
+
+
+    <script>
+        
+        var ws = new WebSocket("ws://127.0.0.1:8000/ws/sc/");
+
+        // ===============> WAY 1
+        // ws.onopen = function(){
+        //     console.log("Web Socket Connection Opened....");
+        //     ws.send("Hi, Message from Client")
+        // }
+        // ws.onmessage = function(event){
+        //     console.log("Message Received from Server....", event);
+        // }
+        // ws.onerror = function(event){
+        //     console.log("Web Socket Error Occured....", event);
+        // }
+        // ws.onclosed = function(event){
+        //     console.log("Web Socket Connection Closed....", event);
+        // }
+
+        // ===============> WAY 2
+        ws.addEventListener("open", ()=>{
+            console.log("Web Socket Connection Opened....");
+            ws.send("Hi, Message from Client")
+        })
+        ws.addEventListener("message", (event)=>{
+            console.log("Message Received from Server....", event);
+            // document.getElementById("counter").innerText = event.data;
+            var data = JSON.parse(event.data);
+            document.getElementById("counter").innerText = data.counter;
+        })
+        ws.addEventListener("error", (event)=>{
+            console.log("Web Socket Error Occured....", event);
+        })
+        ws.addEventListener("close", (event)=>{
+            console.log("Web Socket Connection Closed....", event);
+        })
+
+    </script>
+
+</body>
+</html>
